@@ -119,5 +119,5 @@ python main.py -c path_to_config_file
 ```
 ## Evaluation
 ```bash
-python evaluate_.py --dir path_to_folder(result/2wikimultihopqa_llama2_13b/1)
+python evaluate_.py
 ```
