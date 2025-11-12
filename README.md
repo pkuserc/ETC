@@ -1,4 +1,18 @@
-The code is written based on the DRAGIN framework.
+<p align="center">
+    <h2 align="center">Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG [AAAI'26 Oral]
+    <br>
+     <em>
+    <a href="https://deepblue666.github.io/">Bo Li</a>, Tian Tian, Zhenghua Xu, Hao Cheng, Shikun Zhang and Wei Ye 
+  </em> </h2>
+</p>
+
+<p align="justify">
+Dynamic retrieval-augmented generation (RAG) enables large language models (LLMs) to fetch external knowledge on demand, improving adaptability over static RAG. A key challenge in this setting is determining when retrieval should occur. Prior methods typically trigger retrieval based on low confidence in individual tokens, which can result in delayed intervention after errors have already occurred. We propose the Entropy-Trend Constraint (ETC), a training-free method that selects optimal retrieval timing by modeling the dynamics of token-level uncertainty. Specifically, ETC leverages first- and second-order differences of the entropy sequence to capture emerging uncertainty trends, enabling earlier and more precise retrieval. Experiments across six QA benchmarks and three LLM backbones show that ETC consistently outperforms strong baselines while reducing retrieval frequency. It is especially effective in domain-specific settings, demonstrating robust generalization. Further ablation studies and qualitative analysis confirm that trend-aware uncertainty modeling leads to more effective retrieval timing. Our approach is plug-and-play, model-agnostic, and easy to integrate into existing decoding pipelines. Code is provided in the supplementary materials.
+</p>
+
+- 📖 Paper: [Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG](https://arxiv.org/abs/2505.16107)
+
+
 
 ## Install environment
 ```bash
@@ -29,7 +43,7 @@ rm elasticsearch-7.17.9.tar.gz
 cd elasticsearch-7.17.9
 nohup bin/elasticsearch &  # run Elasticsearch in background
 ```
-#### build the index
+#### Build the index
 ```bash
 python prep_elastic.py --data_path data/dpr/psgs_w100.tsv --index_name wiki 
 Download Dataset
@@ -102,7 +116,7 @@ Running Example
 ```bash
 python main.py -c path_to_config_file
 ```
-## evaluate
+## Evaluation
 ```bash
 python evaluate_.py --dir path_to_folder(result/2wikimultihopqa_llama2_13b/1)
 ```
