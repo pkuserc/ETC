@@ -1,5 +1,6 @@
 <p align="center">
-    <h2 align="center">Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG [AAAI'26 Oral]
+    <h2 align="center">Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG 
+        [AAAI'26 Oral]
     <br>
      <em>
     <a href="https://deepblue666.github.io/">Bo Li</a>, Tian Tian, Zhenghua Xu, Hao Cheng, Shikun Zhang and Wei Ye 
