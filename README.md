@@ -1,5 +1,5 @@
 <p align="center">
-    <h2 align="center">Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG··
+    <h2 align="center">Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG <br>
         [AAAI'26 Oral]
     <br>
      <em>
