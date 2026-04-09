@@ -2,7 +2,7 @@
  
 **ETC: Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG**
 
-[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b.svg)](https://arxiv.org/abs/2505.16463)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b.svg)](https://arxiv.org/pdf/2511.09980)
 [![Venue](https://img.shields.io/badge/AAAI-2026-blue.svg)](https://aaai.org/conference/aaai/aaai-26/)
 [![Task](https://img.shields.io/badge/Task-Dynamic%20RAG-purple.svg)](#overview)
  
