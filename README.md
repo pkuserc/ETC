@@ -4,7 +4,7 @@
 
 [![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b.svg)](https://arxiv.org/abs/2505.16463)
 [![Venue](https://img.shields.io/badge/AAAI-2026-blue.svg)](https://aaai.org/conference/aaai/aaai-26/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![Task](https://img.shields.io/badge/Task-Dynamic%20RAG-purple.svg)](#overview)
  
 **AAAI 2026, Oral**
 
