@@ -347,6 +347,24 @@ Check that the prediction output path matches the path expected by `evaluate_.py
 
 ---
 
+## 🧭 Related RAG Projects
+
+This repository is part of our broader research line on **controllable and adaptive Retrieval-Augmented Generation (RAG)**.
+
+- **GRIP** [ACL 2026 Main Conference]: [Retrieval as Generation: A Unified Framework with Self-Triggered Information Planning](https://github.com/WisdomShell/GRIP)  
+   A **training-based dynamic RAG** framework that internalizes retrieval control into token-level decoding.  
+  
+
+- **ETC** [AAAI 2026 Oral Paper]: [Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG](https://github.com/WisdomShell/ETC)  
+   A **training-free dynamic RAG** method that improves retrieval timing by modeling entropy trends during decoding.  
+  
+
+- **SCD** [AAAI 2026 Oral Paper]: [Language Drift in Multilingual Retrieval-Augmented Generation](https://github.com/WisdomShell/SCD)  
+   A **training-free multilingual RAG** method that mitigates language drift through decoding-time control.  
+
+Together, these projects cover three complementary directions in RAG:
+**training-based retrieval planning, training-free retrieval timing, and decoding-time control for multilingual generation**.
+
 ## 📖 Citation
 
 ```bibtex
