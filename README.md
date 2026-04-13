@@ -1,49 +1,99 @@
 <div align="center">
- 
-**ETC: Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG**
 
-[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b.svg)](https://arxiv.org/pdf/2511.09980)
-[![Venue](https://img.shields.io/badge/AAAI-2026-blue.svg)](https://aaai.org/conference/aaai/aaai-26/)
+# Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG
+
+<p>
+  <strong>English</strong> | <a href="./README_zh.md">简体中文</a>
+</p>
+
+
+<a href="https://arxiv.org/abs/2511.09980"><img src="https://img.shields.io/badge/Paper-arXiv-b31b1b?logo=arxiv&logoColor=white" /></a>
+<a href="https://2026.aclweb.org/"><img src="https://img.shields.io/badge/Venue-AAAI%202026-blue" /></a>
 [![Task](https://img.shields.io/badge/Task-Dynamic%20RAG-purple.svg)](#overview)
- 
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](#installation)
+
+
 **AAAI 2026, Oral**
 
  <a href="https://deepblue666.github.io/">Bo Li</a>, Tian Tian, Zhenghua Xu, Hao Cheng, Shikun Zhang, Wei Ye
 
 </div>
 
----
+This repository releases the implementation of **ETC** (**E**ntropy-**T**rend **C**onstraint), a training-free method for timely retrieval in dynamic retrieval-augmented generation.
 
-## Overview
-
-Dynamic retrieval-augmented generation (Dynamic RAG) allows large language models to retrieve external knowledge on demand during generation. A central challenge is **when retrieval should happen**.
-
-Many existing methods trigger retrieval based on the confidence of individual tokens. This can lead to **delayed retrieval**, where the model has already drifted before external evidence is introduced.
-
-**ETC** is a **training-free** method for timely retrieval in Dynamic RAG. Instead of relying on isolated token confidence, ETC models the **trend of token-level uncertainty** during decoding. It uses:
-
-- first-order differences of the entropy sequence
-- second-order differences of the entropy sequence
-- a dynamic smoothing strategy for more stable triggering
-
-This allows retrieval to be activated **earlier and more precisely**, while also reducing unnecessary retrievals.
-
-### Key Features
-
-- **Training-free** and plug-and-play
-- **Model-agnostic**
-- Easy to integrate into existing decoding pipelines
-- Evaluated on multiple QA benchmarks and LLM backbones
-- Improves answer quality while reducing retrieval frequency
+ETC addresses a central problem in dynamic RAG: **when retrieval should be triggered**. Instead of reacting to isolated token-level confidence drops, ETC models the **trend of token-level uncertainty** during generation. It uses the entropy sequence of generated tokens, its first- and second-order differences, and a dynamic smoothing mechanism to detect unstable decoding states earlier and more precisely.
 
 ---
 
-## Repository Structure
+## 🌟 Overview
+
+Dynamic RAG improves large language models by retrieving external knowledge only when needed. However, many existing methods trigger retrieval only after the model has already produced low-confidence or incorrect tokens, which leads to **delayed retrieval**.
+
+ETC is designed to solve this problem in a simple and practical way:
+
+1. compute token-level entropy during decoding,
+2. build the entropy sequence,
+3. measure first-order and second-order entropy differences,
+4. smooth the trend signal to reduce noisy triggers,
+5. trigger retrieval when uncertainty is rising sharply.
+
+This design allows ETC to inject knowledge at more appropriate positions while reducing unnecessary retrieval operations.
+
+---
+
+## ✨ Highlights
+
+- **Training-free and plug-and-play**  
+  ETC does not require additional training or fine-tuning.
+
+- **Trend-aware retrieval timing**  
+  ETC models how uncertainty evolves during decoding instead of relying on isolated token confidence.
+
+- **Second-order entropy difference with dynamic smoothing**  
+  Retrieval is triggered by sharp changes in uncertainty while suppressing noisy outlier effects.
+
+- **Better timing with fewer retrievals**  
+  ETC is designed to improve answer quality while reducing redundant retrieval frequency.
+
+---
+
+## 📦 What Is Released
+
+This repository includes the following files:
+
+- `main.py`  
+  Main entry for ETC inference.
+
+- `retriever.py`  
+  Retrieval utilities for dynamic RAG.
+
+- `prep_elastic.py`  
+  Builds the Elasticsearch index for Wikipedia passages.
+
+- `generate.py`  
+  Generation-related utilities.
+
+- `data.py`  
+  Dataset loading and preprocessing.
+
+- `evaluate_.py`  
+  Evaluation script.
+
+- `config.json`  
+  Example runtime configuration.
+
+- `LICENSE`  
+  Repository license.
+
+---
+
+## 🗂️ Repository Structure
 
 ```text
 .
 ├── LICENSE
 ├── README.md
+├── README_zh.md
 ├── config.json
 ├── data.py
 ├── evaluate_.py
@@ -53,31 +103,11 @@ This allows retrieval to be activated **earlier and more precisely**, while also
 └── retriever.py
 ```
 
-### File Description
-
-- `main.py`: main entry for ETC inference
-- `retriever.py`: retrieval utilities
-- `prep_elastic.py`: build the Elasticsearch index for Wikipedia passages
-- `generate.py`: generation-related utilities
-- `data.py`: dataset loading and preprocessing
-- `evaluate_.py`: evaluation script
-- `config.json`: example runtime configuration
-
 ---
 
-## Method Summary
+## ⚙️ Installation
 
-ETC addresses the delayed retrieval problem in Dynamic RAG by modeling the **evolution of uncertainty during decoding**.
-
-Instead of making retrieval decisions from a single token score, ETC tracks the entropy sequence across generated tokens and identifies unstable generation trends. Retrieval is triggered when the model is likely entering a low-confidence region, before errors accumulate.
-
-ETC also introduces a **dynamic smoothing mechanism** to reduce noisy triggers and redundant retrieval caused by local entropy fluctuations.
-
----
-
-## Installation
-
-We recommend using **Python 3.9**.
+We recommend using Python 3.9.
 
 ```bash
 conda create -n etc python=3.9
@@ -86,23 +116,25 @@ pip install torch==2.1.1 transformers==4.30.2 beir==1.0.1
 python -m spacy download en_core_web_sm
 ```
 
+Depending on your environment, you may also need to install GPU-specific packages separately.
+
 ---
 
-## Prepare the Retriever
+## 🧾 Prepare the Retriever
 
-This repository uses a Wikipedia passage collection together with Elasticsearch to build the retriever.
+ETC uses a Wikipedia passage collection together with Elasticsearch.
 
-### 1. Download Wikipedia Passages
+### Step 1. Download Wikipedia passages
 
 ```bash
 mkdir -p data/dpr
 wget -O data/dpr/psgs_w100.tsv.gz https://dl.fbaipublicfiles.com/dpr/wikipedia_split/psgs_w100.tsv.gz
-pushd data/dpr
+cd data/dpr
 gzip -d psgs_w100.tsv.gz
-popd
+cd ../..
 ```
 
-### 2. Install and Start Elasticsearch
+### Step 2. Install and start Elasticsearch
 
 ```bash
 cd data
@@ -111,9 +143,10 @@ tar zxvf elasticsearch-7.17.9.tar.gz
 rm elasticsearch-7.17.9.tar.gz
 cd elasticsearch-7.17.9
 nohup bin/elasticsearch &
+cd ../..
 ```
 
-### 3. Build the Wikipedia Index
+### Step 3. Build the Wikipedia index
 
 ```bash
 python prep_elastic.py --data_path data/dpr/psgs_w100.tsv --index_name wiki
@@ -121,28 +154,28 @@ python prep_elastic.py --data_path data/dpr/psgs_w100.tsv --index_name wiki
 
 ---
 
-## Datasets
+## 🧪 Datasets
 
-ETC is evaluated on the following QA benchmarks:
+ETC is evaluated on six QA benchmarks:
 
-- **2WikiMultihopQA**
-- **HotpotQA**
-- **StrategyQA**
-- **IIRC**
-- **BioASQ**
-- **PubMedQA**
+- 2WikiMultihopQA
+- HotpotQA
+- StrategyQA
+- IIRC
+- BioASQ
+- PubMedQA
 
-### Download Instructions
+### Download examples
 
 #### 2WikiMultihopQA
 
-Download the dataset manually from its official repository, then unzip it and move the folder to:
+Download manually and place the extracted folder under:
 
 ```text
 data/2wikimultihopqa
 ```
 
-Reference download link:
+Reference link:
 
 ```text
 https://www.dropbox.com/s/ms2m13252h6xubs/data_ids_april7.zip?e=1
@@ -185,86 +218,149 @@ wget -O data/bioasq_7b_yesno/Task7B_yesno_test.json \
   https://huggingface.co/datasets/nanyy1025/bioasq_7b_yesno/resolve/main/Task7B_yesno_test.json
 ```
 
-#### PubMedQA
+> Please keep dataset paths consistent with the configuration used by `data.py` and `config.json`.
 
-```bash
-mkdir -p data/pubmedQA
-wget -O data/pubmedQA/pqal_train_set.json \
-  https://huggingface.co/datasets/tan9/pubmedQA/resolve/main/pqal_train_set.json
-wget -O data/pubmedQA/test_set.json \
-  https://huggingface.co/datasets/tan9/pubmedQA/resolve/main/test_set.json
+---
+
+## 🔄 Pipeline
+
+The practical workflow is:
+
+```text
+Wikipedia passages
+    -> prep_elastic.py
+    -> Elasticsearch index
+
+QA dataset
+    -> data.py
+    -> formatted evaluation samples
+    -> main.py
+    -> ETC decoding with dynamic retrieval
+    -> generate.py / retriever.py
+    -> predictions
+    -> evaluate_.py
 ```
 
 ---
 
-## Configuration
+## 🚀 Quick Start
 
-Main runtime options are specified in `config.json`.
+### Step 1. Configure runtime settings
 
-### Important Arguments
+Edit `config.json` to match your environment, especially fields such as:
+- model path
+- dataset path
+- index name
+- retrieval threshold
+- backend settings
 
-| Argument | Description | Example |
-|---|---|---|
-| `model_name_or_path` | Hugging Face model path | `meta-llama/Llama-2-13b-chat` |
-| `dataset` | Dataset name | `2wikimultihopqa`, `hotpotqa`, `iirc`, `strategyqa` |
-| `data_path` | Dataset directory | `../data/2wikimultihopqa` |
-| `fewshot` | Number of few-shot examples | `6` |
-| `sample` | Number of sampled questions. `-1` means all data | `1000` |
-| `shuffle` | Whether to shuffle the dataset | `true`, `false` |
-| `generate_max_length` | Maximum generated query length | `64` |
-| `query_formulation` | Retrieval query generation strategy | `direct`, `real_words`, `current`, `last_sentence` |
-| `retrieve_keep_top_k` | Number of reserved tokens for query construction | `35` |
-| `output_dir` | Output directory for results | `../result/2wikimultihopqa_llama2_13b` |
-| `retriever` | Retriever type | `BM25`, `SGPT` |
-| `es_index_name` | Elasticsearch index name | `wiki` |
-
----
-
-## Quick Start
-
-After preparing the retriever and datasets:
+### Step 2. Run ETC inference
 
 ```bash
-python main.py -c config.json
+python main.py --config config.json
 ```
 
-You can also run with another config file:
-
-```bash
-python main.py -c path_to_config_file
-```
-
----
-
-## Evaluation
-
-Run the evaluation script with:
+### Step 3. Evaluate predictions
 
 ```bash
 python evaluate_.py
 ```
 
+Before evaluation, ensure the prediction path and reference path are correctly configured.
+
 ---
 
-## Citation
+## 🧠 Method Summary
 
-If you find this repository useful, please cite:
+ETC addresses the delayed retrieval problem in dynamic RAG by modeling the **evolution of uncertainty** during decoding.
+
+Instead of triggering retrieval from a single token-level confidence value, ETC tracks:
+
+- the entropy sequence of generated tokens,
+- the first-order difference of entropy,
+- the second-order difference of entropy,
+- a dynamic smoothing signal for robust triggering.
+
+This makes retrieval timing more sensitive to emerging uncertainty trends, enabling earlier and more accurate intervention.
+
+---
+
+## 📊 Main Findings
+
+According to the paper, ETC consistently improves performance over strong training-free RAG baselines across six QA benchmarks and multiple LLM backbones. It is particularly effective in domain-specific scenarios, while also reducing average retrieval count.
+
+These results support the core intuition of ETC: **retrieval timing should be guided by uncertainty trends, not just isolated confidence drops**.
+
+---
+
+## 🛠️ Script Notes
+
+### `main.py`
+Main functionality:
+- runs ETC-based dynamic RAG inference,
+- controls retrieval timing,
+- integrates retrieval and generation.
+
+### `retriever.py`
+Main functionality:
+- performs document retrieval from the external corpus,
+- interfaces with the indexed Wikipedia collection.
+
+### `prep_elastic.py`
+Main functionality:
+- builds the Elasticsearch index for the retriever.
+
+### `generate.py`
+Main functionality:
+- handles generation-related logic in the decoding loop.
+
+### `data.py`
+Main functionality:
+- loads and preprocesses evaluation datasets.
+
+### `evaluate_.py`
+Main functionality:
+- computes evaluation metrics on model predictions.
+
+### `config.json`
+Main functionality:
+- stores runtime configuration and experiment settings.
+
+---
+
+## ❓ Common Issues
+
+### 1. Elasticsearch is not running
+The retriever depends on a working Elasticsearch service and a correctly built Wikipedia index.
+
+### 2. Paths in `config.json` are not updated
+Please update all model paths, dataset paths, and index paths before running.
+
+### 3. Dataset files are missing or mislocated
+Keep the downloaded datasets under the expected `data/` structure.
+
+### 4. spaCy model is not installed
+ETC uses SpaCy for stop-word filtering. Make sure `en_core_web_sm` is installed.
+
+### 5. Evaluation cannot find predictions
+Check that the prediction output path matches the path expected by `evaluate_.py`.
+
+---
+
+## 📖 Citation
 
 ```bibtex
-@inproceedings{DBLP:conf/aaai/LiTXCZY26,
-  author       = {Bo Li and
-                  Tian Tian and
-                  Zhenghua Xu and
-                  Hao Cheng and
-                  Shikun Zhang and
-                  Wei Ye},
-  title        = {Modeling Uncertainty Trends for Timely Retrieval in Dynamic {RAG}},
-  booktitle    = {Fortieth {AAAI} Conference on Artificial Intelligence, Thirty-Eighth
-                  Conference on Innovative Applications of Artificial Intelligence,
-                  Sixteenth Symposium on Educational Advances in Artificial Intelligence,
-                  {AAAI} 2026, Singapore, January 20-27, 2026},
-  pages        = {31527--31535},
-  publisher    = {{AAAI} Press},
-  year         = {2026},
+@inproceedings{li2026modeling,
+  title={Modeling Uncertainty Trends for Timely Retrieval in Dynamic RAG},
+  author={Li, Bo and Tian, Tian and Xu, Zhenghua and Cheng, Hao and Zhang, Shikun and Ye, Wei},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={40},
+  number={37},
+  pages={31527--31535},
+  year={2026}
 }
 ```
+
+If you use this repository, please cite the paper.
+
+---
