@@ -22,6 +22,7 @@
 
 与依赖单个 token 置信度进行触发的做法不同，ETC 建模的是生成过程中 **token-level uncertainty 的变化趋势**。它基于 token 熵序列及其一阶、二阶差分，并结合动态平滑机制，更早、更稳定地检测模型即将进入不稳定生成区域的时刻，从而在更合适的时间注入外部知识。
 
+> Related RAG projects from us: [**GRIP** (ACL 2026 Main)](https://github.com/WisdomShell/GRIP) · [**ETC** (AAAI 2026 Oral)](https://github.com/WisdomShell/ETC) · [**SCD** (AAAI 2026 Oral)](https://github.com/WisdomShell/SCD)
 ---
 
 ## 🌟 概述
