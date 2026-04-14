@@ -23,7 +23,10 @@ This repository releases the implementation of **ETC** (**E**ntropy-**T**rend **
 
 ETC addresses a central problem in dynamic RAG: **when retrieval should be triggered**. Instead of reacting to isolated token-level confidence drops, ETC models the **trend of token-level uncertainty** during generation. It uses the entropy sequence of generated tokens, its first- and second-order differences, and a dynamic smoothing mechanism to detect unstable decoding states earlier and more precisely.
 
+> Related RAG projects from us: [**GRIP** (ACL 2026 Main)](https://github.com/WisdomShell/GRIP) · [**ETC** (AAAI 2026 Oral)](https://github.com/WisdomShell/ETC) · [**SCD** (AAAI 2026 Oral)](https://github.com/WisdomShell/SCD)
+
 ---
+
 
 ## 🌟 Overview
 
